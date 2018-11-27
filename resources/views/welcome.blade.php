@@ -1,98 +1,59 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ config('app.locale') }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Laravel</title>
-
+        <link href="{{ asset('css/apps.css') }}" rel="stylesheet" type="text/css">
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
-
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                height: 100vh;
-                margin: 0;
-            }
-
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 13px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
+        <div id="appendDivNews">
+            <nav class="navbar fixed-top navbar-light bg-faded" style="background-color: #e3f2fd;">
+            <a class="navbar-brand" href="#">News Around the World</a>
+            </nav>
+                {{ csrf_field() }}
+            <section id="content" class="section-dropdown">
+            <p class="select-header"> Search News</p>
+            <label class="select"> 
+                <select name="news_sources" id="news_sources">
+                <option value="{{@$source_id}} : {{@$source_name}}">{{$source_name}}</option>
+                @foreach ($news_sources as $news_source)
+                <option value="{{$news_source['id']}} : {{$news_source['name'] }}">{{$news_source['name']}}</option>
+                @endforeach
+                </select>
+            </label>
 
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
+            </section> 
+            <p> News Source : {{$source_name}}</p>
+                <section class="news">
+                @foreach($news as $selected_news)
+                <article>
+                    <img src="{{$selected_news['urlToImage']}}" alt="" />
+                    <div class="text">
+                        <h1>{{$selected_news['title']}}</h1>
+                        <p style="font-size: 14px">{{$selected_news['description']}} <a href="{{$selected_news['url']}}" target="_blank"><small>read more...</small></a> </p>
+                        <div style="padding-top: 5px;font-size: 12px">Author: {{$selected_news['author'] or "Unknown" }}</div>
+                        @if($selected_news['publishedAt'] != null)
+                        <div style="padding-top: 5px;">Date Published: {{ Carbon\Carbon::parse($selected_news['publishedAt'])->format('l jS \\of F Y ') }}</div>
+                        @else
+                        <div style="padding-top: 5px;">Date Published: Unknown</div>
                         @endif
-                    @endauth
-                </div>
-            @endif
-
-            <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
-            </div>
+                    </div>
+                </article>
+                @endforeach
+            </section>
         </div>
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- Scripts -->
+    <script src="{{ asset('js/apps.js') }}"></script>
+
     </body>
 </html>

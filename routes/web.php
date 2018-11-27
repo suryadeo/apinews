@@ -11,6 +11,6 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Route::get('/', 'ApiController@newsapi');
+Route::post('/source_id', 'ApiController@newsapi');
